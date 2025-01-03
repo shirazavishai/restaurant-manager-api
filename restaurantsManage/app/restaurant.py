@@ -1,22 +1,26 @@
-class Restaurant:
-    def __init__(self):
-        self.name = name
-        self.address = address
-        self.style = style
-        self.vegetarian = vegetarian
-        self.open_hour = open_hour
-        self.close_hour = close_hour
-        self.delivery = delivery
+from datetime import datetime
+from pydantic import BaseModel
 
-    def __str__(self):
-        return f"{self.name} - {self.address} - {self.style} - {self.vegetarian} - {self.open_hour} - {self.close_hour} - {self.delivery}"
+class Restaurant(BaseModel):
+    name: str
+    style: str
+    address: str
+    open_hour: str
+    close_hour: str
+    vegetarian: bool
+    delivery: bool
 
-    def is_open(self, hour):
-        return self.open_hour <= hour <= self.close_hour
-    
-    def is_vegetarian(self):
-        return self.vegetarian
-    
-    def is_delivery(self):
-        return self.delivery
+# Check if the restaurant is open based on the current time
+def is_open_now(open_hour, close_hour):
+    now = datetime.now().time()
+    open_time = datetime.strptime(open_hour, '%H:%M').time()
+    close_time = datetime.strptime(close_hour, '%H:%M').time()
 
+    return open_time <= now <= close_time
+
+def is_open_at_time(requested_time, open_hour, close_hour):
+    requested_time = datetime.strptime(requested_time, '%H:%M').time()
+    open_time = datetime.strptime(open_hour, '%H:%M').time()
+    close_time = datetime.strptime(close_hour, '%H:%M').time()
+
+    return open_time <= requested_time <= close_time

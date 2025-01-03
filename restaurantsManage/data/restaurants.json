@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Pizza Hut",
+        "style": "Italian",
+        "address": "Wherever street 99, Somewhere",
+        "openHour": "09:00",
+        "closeHour": "23:00",
+        "vegetarian": true,
+        "delivers": true
+    },
+    {
+        "name": "Le Bistrot",
+        "style": "French",
+        "address": "Paris Road 12, Paris",
+        "openHour": "10:00",
+        "closeHour": "22:00",
+        "vegetarian": false,
+        "delivers": false
+    },
+    {
+        "name": "Green Bowl",
+        "style": "Italian",
+        "address": "Veggie Street 15, Healthy City",
+        "openHour": "08:00",
+        "closeHour": "22:00",
+        "vegetarian": true,
+        "delivers": true
+    }
+]
