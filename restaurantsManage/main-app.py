@@ -1,6 +1,11 @@
-from flask import Flask, request, jsonify
+# filepath: /c:/Users/Asus/Desktop/Varonis/restaurant-manager-api/main.py
+from fastapi import FastAPI
+from app.api import router
 
-app = Flask(__name__)
+app = FastAPI()
+
+app.include_router(router)
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
