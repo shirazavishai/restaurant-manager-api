@@ -74,17 +74,7 @@ def find_restaurants(query_words, query_string):
         if not time_matched:
             continue
 
-        # 2. Vegetarian Matching with Fuzzy Logic
-        # vegetarian_matched = any(
-        #     fuzz.partial_ratio(keyword, restaurant_vegetarian) > 75
-        #     for keyword in vegetarian_keywords
-        #     if keyword in query_words
-        # )
-        # if 'vegetarian' in query_words and not vegetarian_matched:
-        #     continue
-
         require_vegetarian = False
-        vegetarian_matched=True
         for keyword in vegetarian_keywords:
             if keyword in query_words:
                 require_vegetarian = True
