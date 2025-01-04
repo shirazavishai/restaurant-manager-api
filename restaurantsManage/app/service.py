@@ -2,7 +2,7 @@ import re
 import os
 import json
 import app.restaurant
-import pyodbc
+import app.db
 from fuzzywuzzy import fuzz
 import dateparser
 from datetime import datetime
@@ -26,7 +26,7 @@ def search_required_restaurant(query_string: str):
         return "No matching restaurants found"
 
     # Log the query history to the database
-    # save_query_history(query_string, recommendation)
+    app.db.save_query_history(query_string, matching_restaurants)
 
     json_string = ""
     for restaurant in matching_restaurants:
@@ -136,23 +136,3 @@ def extract_time_from_query(query):
     filtered_matches = [match[0] for match in matches if match[0]]
     
     return filtered_matches
-
-
-
-
-# SQL query to save query history to the database
-def save_query_history(query, recommendation):
-    conn = pyodbc.connect(conn_str)
-    cursor = conn.cursor()
-
-    sql_query = """
-        INSERT INTO requested_history (query, recommendation, timestamp)
-        VALUES (?, ?, ?)
-    """
-
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    cursor.execute(sql_query, (query, json.dumps(recommendation), timestamp))
-
-    conn.commit()
-    conn.close()
-
