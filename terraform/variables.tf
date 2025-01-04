@@ -11,6 +11,7 @@ variable "client_id" {
 variable "client_secret" {
   description = "The Client Secret for Azure"
   type        = string
+  sensitive   = true 
 }
 
 variable "resource_group_name" {
@@ -34,7 +35,7 @@ variable "sql_admin_username" {
 variable "sql_admin_password" {
   description = "The administrator password for SQL Server"
   type        = string
-  default     = "H@Sh1CoR3!"
+  sensitive   = true 
 }
 
 variable "app_service_plan_sku" {

@@ -26,7 +26,7 @@ def search_required_restaurant(query_string: str):
         return "No matching restaurants found"
 
     # Log the query history to the database
-    app.db.save_query_history(query_string, matching_restaurants)
+ #   app.db.save_query_history(query_string, matching_restaurants)
 
     json_string = ""
     for restaurant in matching_restaurants:

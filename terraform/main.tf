@@ -1,3 +1,4 @@
+# Provider 
 provider "azurerm" {
   features {}
   tenant_id     = var.tenant_id
@@ -5,6 +6,7 @@ provider "azurerm" {
   client_secret = var.client_secret
 }
 
+# Resources
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location
@@ -58,6 +60,7 @@ resource "azurerm_sql_firewall_rule" "allow_azure_services" {
   end_ip_address      = "0.0.0.0"
 }
 
+# Output 
 output "app_service_url" {
   value = azurerm_app_service.app.default_site_hostname
 }

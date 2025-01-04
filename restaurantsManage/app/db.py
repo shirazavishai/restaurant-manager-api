@@ -4,7 +4,8 @@ import json
 from datetime import datetime
 
 # Retrieve the database connection string from the environment variable (injected by terraform)
-connection_string = os.getenv('DATABASE_URL')
+connection_string = "test"
+#connection_string = os.getenv('DATABASE_URL')
 if connection_string is None:
     raise ValueError("DATABASE_URL environment variable is not set.")
 

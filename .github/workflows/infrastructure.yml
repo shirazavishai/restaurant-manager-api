@@ -1,0 +1,58 @@
+name: Infrastructure Provisioning Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.tf'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/*.tf' 
+  workflow_dispatch:
+    # Manually run
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      RESOURCE_GROUP_NAME: "restaurant-recommendation-api-resources"
+      LOCATION: "West Europe"
+      APP_SERVICE_PLAN_TIER: "Standard"
+      APP_SERVICE_PLAN_SIZE: "S1"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+      
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}" -var="client_id=${{ secrets.AZURE_CLIENT_ID }}" -var="client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" -var="sql_admin_username=${{ secrets.SQL_ADMIN_USERNAME }}" -var="sql_admin_password=${{ secrets.SQL_ADMIN_PASSWORD }}"
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+      - name: Output App Service URL
+        run: echo "App Service URL: ${{ steps.terraform.outputs.app_service_url }}"
+
+      - name: Output SQL Server FQDN
+        run: echo "SQL Server FQDN: ${{ steps.terraform.outputs.sql_server_fqdn }}"
