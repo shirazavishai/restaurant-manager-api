@@ -1,4 +1,5 @@
 # filepath: /c:/Users/Asus/Desktop/Varonis/restaurant-manager-api/app/api.py
+import json
 from fastapi import APIRouter, Request
 import app.service as service
 
@@ -14,15 +15,10 @@ restaurants_db = [
 
 
 @router.get("/find_restaurant")
-async def get_query_param(param: str):
-    return {service.search_required_restaurant(param)  }
+async def get_query_param(sentence: str = "An italian restaurant that opens at 08:00 vegi"):
+    return {service.search_required_restaurant(sentence)  }
 
-@router.get("/header")
-async def get_header_param(request: Request):
-    header_param = request.headers.get('X-String-Param')
-    return {"received_header": header_param}
+@router.get("/all_restaurants")
+async def get_all_restaurants():
+    return {json.dumps(service.restaurants)}
 
-@router.get("/find_restaurant2")
-async def get_query_param2(style: str, vegetarian: str, current_time: str, request: Request):
-    service.search_required_restaurant(param)    
-    return {"received_param": param}
