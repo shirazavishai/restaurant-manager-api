@@ -44,7 +44,7 @@ def find_restaurants(query_words, query_string):
     matching_restaurants = []
     current_time = datetime.now().strftime('%H:%M')  # Current time for "now"
 
-    vegetarian_keywords = ["vegetarian", "vegan", "veg"]
+    vegetarian_keywords = ["vegetarian", "vegan", "veg", "vegie","veggy","veggie","veggies","vegg","veget"]
 
     for restaurant in relevant_restaurants:
 
@@ -75,12 +75,20 @@ def find_restaurants(query_words, query_string):
             continue
 
         # 2. Vegetarian Matching with Fuzzy Logic
-        vegetarian_matched = any(
-            fuzz.partial_ratio(keyword, restaurant_vegetarian) > 75
-            for keyword in vegetarian_keywords
-            if keyword in query_words
-        )
-        if 'vegetarian' in query_words and not vegetarian_matched:
+        # vegetarian_matched = any(
+        #     fuzz.partial_ratio(keyword, restaurant_vegetarian) > 75
+        #     for keyword in vegetarian_keywords
+        #     if keyword in query_words
+        # )
+        # if 'vegetarian' in query_words and not vegetarian_matched:
+        #     continue
+
+        require_vegetarian = False
+        vegetarian_matched=True
+        for keyword in vegetarian_keywords:
+            if keyword in query_words:
+                require_vegetarian = True
+        if (require_vegetarian and restaurant_vegetarian != "yes"):
             continue
 
         # If all criteria match, add the restaurant to results
