@@ -2,7 +2,7 @@ import re
 import os
 import json
 import app.restaurant
-import pyodbc
+import app.db
 from fuzzywuzzy import fuzz
 import dateparser
 from datetime import datetime
@@ -26,7 +26,7 @@ def search_required_restaurant(query_string: str):
         return "No matching restaurants found"
 
     # Log the query history to the database
-    # save_query_history(query_string, recommendation)
+    app.db.save_query_history(query_string, matching_restaurants)
 
     json_string = ""
     for restaurant in matching_restaurants:
@@ -44,7 +44,7 @@ def find_restaurants(query_words, query_string):
     matching_restaurants = []
     current_time = datetime.now().strftime('%H:%M')  # Current time for "now"
 
-    vegetarian_keywords = ["vegetarian", "vegan", "veg"]
+    vegetarian_keywords = ["vegetarian", "vegan", "veg", "vegie","veggy","veggie","veggies","vegg","veget"]
 
     for restaurant in relevant_restaurants:
 
@@ -74,13 +74,11 @@ def find_restaurants(query_words, query_string):
         if not time_matched:
             continue
 
-        # 2. Vegetarian Matching with Fuzzy Logic
-        vegetarian_matched = any(
-            fuzz.partial_ratio(keyword, restaurant_vegetarian) > 75
-            for keyword in vegetarian_keywords
-            if keyword in query_words
-        )
-        if 'vegetarian' in query_words and not vegetarian_matched:
+        require_vegetarian = False
+        for keyword in vegetarian_keywords:
+            if keyword in query_words:
+                require_vegetarian = True
+        if (require_vegetarian and restaurant_vegetarian != "yes"):
             continue
 
         # If all criteria match, add the restaurant to results
@@ -138,23 +136,3 @@ def extract_time_from_query(query):
     filtered_matches = [match[0] for match in matches if match[0]]
     
     return filtered_matches
-
-
-
-
-# SQL query to save query history to the database
-def save_query_history(query, recommendation):
-    conn = pyodbc.connect(conn_str)
-    cursor = conn.cursor()
-
-    sql_query = """
-        INSERT INTO requested_history (query, recommendation, timestamp)
-        VALUES (?, ?, ?)
-    """
-
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    cursor.execute(sql_query, (query, json.dumps(recommendation), timestamp))
-
-    conn.commit()
-    conn.close()
-
