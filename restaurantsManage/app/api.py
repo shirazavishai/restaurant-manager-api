@@ -15,8 +15,7 @@ restaurants_db = [
 
 @router.get("/find_restaurant")
 async def get_query_param(param: str):
-    service.search_required_restaurant(param)    
-    return {"received_param": param}
+    return {service.search_required_restaurant(param)  }
 
 @router.get("/header")
 async def get_header_param(request: Request):

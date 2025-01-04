@@ -2,28 +2,64 @@
     {
         "name": "Pizza Hut",
         "style": "Italian",
-        "address": "Wherever street 99, Somewhere",
+        "address": "Hashmonaim street 99, TLV",
         "openHour": "09:00",
         "closeHour": "23:00",
-        "vegetarian": true,
-        "delivers": true
+        "vegetarian": "yes",
+        "delivers": "yes"
     },
     {
         "name": "Le Bistrot",
         "style": "French",
-        "address": "Paris Road 12, Paris",
+        "address": "Paris Road 12, TLV",
         "openHour": "10:00",
         "closeHour": "22:00",
-        "vegetarian": false,
-        "delivers": false
+        "vegetarian": "no",
+        "delivers": "no"
     },
     {
         "name": "Green Bowl",
         "style": "Italian",
-        "address": "Veggie Street 15, Healthy City",
+        "address": "Veggie Street 15, Ramat-Gan",
         "openHour": "08:00",
         "closeHour": "22:00",
-        "vegetarian": true,
-        "delivers": true
+        "vegetarian": "yes",
+        "delivers": "yes"
+    },
+    {
+        "name": "Foodie",
+        "style": "Maxican",
+        "address": "Hamchshev Street 99, Natanya City",
+        "openHour": "08:00",
+        "closeHour": "22:00",
+        "vegetarian": "yes",
+        "delivers": "yes"
+    },
+    {
+        "name": "Mariano",
+        "style": "Italian",
+        "address": "Mariano Street 9, TLV",
+        "openHour": "15:00",
+        "closeHour": "00:00",
+        "vegetarian": "no",
+        "delivers": "no"
+    },
+    {
+        "name": "Haachim",
+        "style": "Israeli",
+        "address": "Iben-Gabirol Street 21, TLV",
+        "openHour": "08:00",
+        "closeHour": "00:00",
+        "vegetarian": "no",
+        "delivers": "yes"
+    },
+    {
+        "name": "Humus-Hasan",
+        "style": "Israeli",
+        "address": "Kong-George Street 33, TLV",
+        "openHour": "09:00",
+        "closeHour": "18:00",
+        "vegetarian": "yes",
+        "delivers": "no"
     }
 ]
