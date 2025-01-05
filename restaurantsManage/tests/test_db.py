@@ -8,7 +8,7 @@ class TestDBOperations(unittest.TestCase):
     @patch.dict(os.environ, {"DATABASE_URL": "test_connection_string"})
     @patch("app.db.pyodbc.connect")
     def test_save_query_history(self, mock_connect):
-        """Test save_query_history function"""
+        #Test save_query_history function
 
         # Mock the database connection and cursor
         mock_conn = MagicMock()
@@ -50,13 +50,13 @@ class TestDBOperations(unittest.TestCase):
 
     @patch.dict(os.environ, {"DATABASE_URL": "test_connection_string"})
     def test_database_url_set(self):
-        """Test that the DATABASE_URL environment variable is set correctly"""
+        # Test that the DATABASE_URL environment variable is set correctly
         self.assertEqual(os.getenv('DATABASE_URL'), "test_connection_string")
 
     @patch.dict(os.environ, {"DATABASE_URL": "test_connection_string"})
     @patch("app.db.pyodbc.connect")
     def test_get_query_history(self, mock_connect):
-        """Test get_query_history function"""
+        # Test get_query_history function
         
         # Mock the environment variable and database response
         mock_conn = MagicMock()

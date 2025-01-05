@@ -6,99 +6,109 @@ import app.db
 from fuzzywuzzy import fuzz
 import dateparser
 from datetime import datetime
+from dotenv import load_dotenv
+import app.logger as logger
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"/data"
 json_file_path = os.path.join(base_dir, 'restaurants.json')
 with open(json_file_path, 'r') as f:
     restaurants = json.load(f)
-
-
+    if (restaurants is None):
+        logger.logger.error("Error loading restaurants data from JSON file")
+        raise Exception("Error loading restaurants data from JSON file")
+    logger.logger.info("Restaurants data loaded successfully")
 
 def search_required_restaurant(query_string: str):
-    """
-    Search for a restaurant based on the required parameters
-    """
-    query_words = preprocess_query(query_string)
-    matching_restaurants = find_restaurants(query_words,query_string)
+    logger.logger.info("Searching for a restaurant based on the given sentence")
+    try:
+        query_words = preprocess_query(query_string)
+        matching_restaurants = find_restaurants(query_words,query_string)
 
-    if not matching_restaurants:
-        print("No matching restaurants found")
-        return "No matching restaurants found"
+        if not matching_restaurants:
+            logger.logger.debug("No matching restaurants found")
+            return "No matching restaurants found"
 
-    # Log the query history to the database
-    app.db.save_query_history(query_string, matching_restaurants)
+        # Log the query history to the database
+        app.db.save_query_history(query_string, matching_restaurants)
 
-    json_string = ""
-    for restaurant in matching_restaurants:
-        json_string+=restaurant.to_json_string()
+        json_string = ""
+        for restaurant in matching_restaurants:
+            json_string+=restaurant.to_json_string()
 
-    return json_string
-
+        return json_string
+    except Exception as e:
+        logger.logger.error(f"Error in search_required_restaurant: {e}")
+        return f"An error occurred: {e}"
 
 
 def find_restaurants(query_words, query_string):
-    relevant_restaurants = extract_relevant_styles(query_words)
-    if not relevant_restaurants:
-        return []  # No matching styles, so no results
+    try:
 
-    matching_restaurants = []
-    current_time = datetime.now().strftime('%H:%M')  # Current time for "now"
+        relevant_restaurants = extract_relevant_styles(query_words)
+        if not relevant_restaurants:
+            return []  # No matching styles, so no results
 
-    vegetarian_keywords = ["vegetarian", "vegan", "veg", "vegie","veggy","veggie","veggies","vegg","veget"]
+        matching_restaurants = []
 
-    for restaurant in relevant_restaurants:
+        vegetarian_keywords = ["vegetarian", "vegan", "veg", "vegie","veggy","veggie","veggies","vegg","veget"]
 
-        restaurant_vegetarian = str(restaurant['vegetarian']).lower()
-        restaurant_open_hour = restaurant['openHour']
-        restaurant_close_hour = restaurant['closeHour']
+        for restaurant in relevant_restaurants:
 
-        # 1. Time Matching
-        time_matched = False
-        if 'now' in query_words:
-            time_matched = app.restaurant.is_open_now(
-                restaurant_open_hour, restaurant_close_hour
-            )
-        else:
-            time_words = extract_time_from_query(query_string)
-            if time_words:
-                parsed_time = dateparser.parse(time_words[0].lower())
-                if parsed_time:
-                    time_matched = app.restaurant.is_open_at_time(
-                        parsed_time.strftime('%H:%M'),
-                        restaurant_open_hour,
-                        restaurant_close_hour
-                    )
+            restaurant_vegetarian = str(restaurant['vegetarian']).lower()
+            restaurant_open_hour = restaurant['openHour']
+            restaurant_close_hour = restaurant['closeHour']
+
+            # 1. Time Matching
+            time_matched = False
+            if 'now' in query_words:
+                time_matched = app.restaurant.is_open_now(
+                    restaurant_open_hour, restaurant_close_hour
+                )
             else:
-                time_matched = True
+                time_words = extract_time_from_query(query_string)
+                if time_words:
+                    parsed_time = dateparser.parse(time_words[0].lower())
+                    if parsed_time:
+                        time_matched = app.restaurant.is_open_at_time(
+                            parsed_time.strftime('%H:%M'),
+                            restaurant_open_hour,
+                            restaurant_close_hour
+                        )
+                else:
+                    time_matched = True
 
-        if not time_matched:
-            continue
+            if not time_matched:
+                continue
+            
+            # 2. Vegetarian Matching
+            require_vegetarian = False
+            for keyword in vegetarian_keywords:
+                if keyword in query_words:
+                    require_vegetarian = True
+            if (require_vegetarian and restaurant_vegetarian != "yes"):
+                continue
 
-        require_vegetarian = False
-        for keyword in vegetarian_keywords:
-            if keyword in query_words:
-                require_vegetarian = True
-        if (require_vegetarian and restaurant_vegetarian != "yes"):
-            continue
+            # If all criteria match, add the restaurant to results
+            matching_restaurants.append(app.restaurant.Restaurant(
+                name=restaurant['name'],
+                style=restaurant['style'],
+                address=restaurant['address'],
+                open_hour=restaurant_open_hour,
+                close_hour=restaurant_close_hour,
+                vegetarian=restaurant['vegetarian'],
+                delivery=restaurant['delivers']
+            ))
 
-        # If all criteria match, add the restaurant to results
-        matching_restaurants.append(app.restaurant.Restaurant(
-            name=restaurant['name'],
-            style=restaurant['style'],
-            address=restaurant['address'],
-            open_hour=restaurant_open_hour,
-            close_hour=restaurant_close_hour,
-            vegetarian=restaurant['vegetarian'],
-            delivery=restaurant['delivers']
-        ))
+            logger.logger.debug(f"Restaurant {restaurant['name']} matched the criteria")
 
-    return matching_restaurants
+        return matching_restaurants
+    except Exception as e:
+        logger.logger.error(f"Error in find_restaurants: {e}")
+        return []
 
 
-def extract_relevant_styles(query_words):
-    """
-    Extract styles from the query and match them with the available restaurant styles.
-    """
+# Extract styles from the query and match them with the available restaurant styles.
+def extract_relevant_styles(query_words):    
     all_styles = {restaurant['style'].lower() for restaurant in restaurants}
     the_style = ""
 

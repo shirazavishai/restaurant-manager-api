@@ -4,11 +4,12 @@ import json
 from datetime import datetime
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
+import app.logger as logger
 
 # Load environment variables from .env file if running locally
-if os.getenv('ENVIRONMENT') == 'local':
+if (os.getenv('DATABASE_URL') is None):
     load_dotenv()
-
+    
 connection_string = os.getenv('DATABASE_URL')
 
 if connection_string is None:
@@ -17,17 +18,17 @@ if connection_string is None:
 encryption_key = Fernet.generate_key()  # Save this securely
 cipher = Fernet(encryption_key)
 
+# Encrypt data using Fernet symmetric encryption.
 def encrypt_data(data: str) -> str:
-    """Encrypt data using Fernet symmetric encryption."""
     return cipher.encrypt(data.encode()).decode()
 
+# Decrypt data using Fernet symmetric encryption.
 def decrypt_data(data: str) -> str:
-    """Decrypt data using Fernet symmetric encryption."""
     return cipher.decrypt(data.encode()).decode()
 
 
+# Save the query history to the database.
 def save_query_history(query, recommendation):
-    """Save the query history to the database."""
     try:
         # Establish a database connection using the connection string
         conn = pyodbc.connect(connection_string)
