@@ -14,6 +14,8 @@ name: Python Docker Deployment to Azure App Service
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    env:
+      APPLICATION_INSIGHTS_INSTRUMENTATION_KEY=${{ secrets.APPLICATION_INSIGHTS_INSTRUMENTATION_KEY }}
 
     steps:
     - name: Checkout repository
@@ -28,7 +30,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r restaurantsManage/requirements.txt
-    
+
     - name: Run tests
       run: |
         python -m pytest restaurantsManage/tests/ --junitxml=test-results.xml
