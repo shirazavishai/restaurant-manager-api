@@ -66,13 +66,11 @@ Get recommandation:
 1. Go to Swagger
 1. Get /find_restaurant, click on 'Try it out'
 1. Fill your sentence in sentenct box or use the given example 'An italian restaurant that opens at 08:00 vegi'
-1. Execute ==> `[
-  "{\"name\": \"Green Bowl\", \"style\": \"Italian\", \"address\": \"Veggie Street 15, Ramat-Gan\", \"open_hour\": \"08:00\", \"close_hour\": \"22:00\", \"vegetarian\": \"yes\", \"delivery\": \"yes\"}"
-]`
+1. Expected output: `[ "{\"name\": \"Green Bowl\", \"style\": \"Italian\", \"address\": \"Veggie Street 15, Ramat-Gan\", \"open_hour\": \"08:00\", \"close_hour\": \"22:00\", \"vegetarian\": \"yes\", \"delivery\": \"yes\"}"]`
 
 ### Unit Tests
-* 2 tests files, for b.py and service.py
-* Executing by the pipeline, output will save to tests/test-results.xml
+* 2 tests files, for db.py and service.py
+* Run via pipeline, output is saved in tests/test-results.xml
 
 ---
 
