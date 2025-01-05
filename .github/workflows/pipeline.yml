@@ -27,11 +27,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r restaurantsManage/requirements.txt
     
     - name: Run tests
       run: |
-        python -m pytest tests/
+        python -m pytest restaurantsManage/tests/ --junitxml=test-results.xml
 
     - name: 'Login to Azure Container Registry'
       uses: azure/docker-login@v1
@@ -42,11 +42,11 @@ jobs:
 
     - name: 'Build Docker Image'
       run: |
-        docker build . -t ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }}
+        docker build -f restaurantsManage/Dockerfile -t ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }}
     
     - name: 'Push Docker Image to ACR'
       run: |
-        docker push ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }}
+        docker push ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }} || exit 1
 
     - name: 'Deploy Docker Image to Azure App Service'
       uses: azure/webapps-deploy@v2
