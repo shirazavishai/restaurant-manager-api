@@ -30,6 +30,7 @@ AZURE_CONTAINER_REGISTRY: Your Azure Container Registry name (without .azurecr.i
 ACR_USERNAME: The username for your Azure Container Registry. (Usually in the form of a service principal or admin user).
 ACR_PASSWORD: The password for your Azure Container Registry (stored in the form of a secret).
 AZURE_APP_SERVICE_PUBLISH_PROFILE: The publish profile from your Azure App Service
+APPLICATION_INSIGHTS_INSTRUMENTATION_KEY: The Instrumentation Key from existing Azure Application Insights resource.
 ```
 
 ---
@@ -68,3 +69,13 @@ Get recommandation:
 1. Execute ==> `[
   "{\"name\": \"Green Bowl\", \"style\": \"Italian\", \"address\": \"Veggie Street 15, Ramat-Gan\", \"open_hour\": \"08:00\", \"close_hour\": \"22:00\", \"vegetarian\": \"yes\", \"delivery\": \"yes\"}"
 ]`
+
+### Unit Tests
+* 2 tests files, for b.py and service.py
+* Executing by the pipeline, output will save to tests/test-results.xml
+
+---
+
+### Improvement options
+1. Use 'Azure SQL Always Encrypted' and add it to db_connection_string instead of using encryption library
+1. Sign docker images
