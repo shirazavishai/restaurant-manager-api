@@ -89,16 +89,12 @@ Requirement | Solution / Implementation Details
 The assignment submission should be done in a GIT repo that we can access, could be yours or a dedicated one. a. Please include all code required to set up the system | https://github.com/shirazavishai/restaurant-manager-api.git 
 The system has to be cloud-native, with a preference for Azure with a simple architecture that will require a minimal amount of maintenance | Used Azure sql and Azure service app, together they ensure minimal maintenance while providing a reliable and secure environment for the cloud-native system
 The system should be written in full IaC style. Use Terraform for configuring the required cloud resources | I used Terraform with variables to define the system's infrastructure as code, ensuring consistent and flexible provisioning of Azure resources
-There should be some backend storage mechanism that holds the history of all requests and returned responses. a. Consider that the backend data stored is highly confidential | I used Python with pyodbc to connect to Azure SQL for storing request and response histories. To ensure confidentiality, I encrypted sensitive data using the cryptography library and managed environment variable to pass the connection string
+There should be some backend storage mechanism that holds the history of all requests and returned responses. a. Consider that the backend data stored is highly confidential | I used Python with pyodbc to connect to Azure SQL for storing request and response histories. To ensure confidentiality, I encrypted sensitive data using the cryptography library and managed environment variable to pass the connection string. 
+Improvement | OPTIONAL: for better data protection, use 'Azure SQL Always Encrypted' and add it to db_connection_string
 Make sure the system is secure. a. However, there is no need for the user to authenticate with the system (Assume it’s a free public service) | Secured DB (using encryption), Using secrets instead of hardcoded credenials, Azure service principal, Azure firewall to restrict access to known IPs or Azure services
+Improvement | OPTIONAL: Sign docker images 
 The system code should be deployed using an automatic CI\CD pipeline following any code change, including when adding or updating restaurants | I set up a CI/CD pipelines to automate infrastructure provisioning with Terraform and deploy Python code to Azure App Service, ensuring updates with every code change.
 The code should be ready for code review (as possible) | Unittests, logger, comments
 Coding: Python \ PowerShell |  The application is written in Python using FastAPI for a clean, fast, and modern API design. Swagger is automatically provided.
-
+Improvement | OPTIONAL: Improve the accuracy of results and efficiency of parser functions in Python code 
     
-
----
-### Improvement options
-1. Use 'Azure SQL Always Encrypted' and add it to db_connection_string instead of using encryption library
-1. Sign docker images
-
