@@ -63,3 +63,5 @@ jobs:
         app-name: restaurant-recommendation-appservice
         publish-profile: ${{ secrets.AZURE_APP_SERVICE_PUBLISH_PROFILE }}  # Set this in GitHub secrets
         images: ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }}
+        app-settings: |
+          APPLICATION_INSIGHTS_INSTRUMENTATION_KEY=${{ secrets.APPLICATION_INSIGHTS_INSTRUMENTATION_KEY }}
