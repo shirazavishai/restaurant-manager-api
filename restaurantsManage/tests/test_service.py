@@ -1,6 +1,11 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import os
+# Ensure the app module can be found
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app.service import search_required_restaurant, find_restaurants, extract_relevant_styles
 
 class TestRestaurantSearch(unittest.TestCase):
 

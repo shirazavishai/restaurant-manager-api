@@ -3,6 +3,12 @@ from unittest.mock import patch, MagicMock
 import os
 import json
 
+# Ensure the app module can be found
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app.db import save_query_history, encrypt_data
+
 class TestDBOperations(unittest.TestCase):
 
     @patch.dict(os.environ, {"DATABASE_URL": "test_connection_string"})
