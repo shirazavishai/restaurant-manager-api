@@ -40,7 +40,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: test-results
-        path: restaurantsManage/tests/test-results.xml
+        path:  /home/runner/work/restaurant-manager-api/restaurant-manager-api/test-results.xml 
 
     - name: 'Login to Azure Container Registry'
       uses: azure/docker-login@v1
