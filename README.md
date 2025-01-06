@@ -4,46 +4,52 @@
 
 #### Infrastructur - Terraform
 1. Prepare an Azure service principal with a secret: 
-```
-az ad sp create-for-rbac --name "my-service-principal" --role contributor --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group-name}
+    ```
+    az ad sp create-for-rbac --name "my-service-principal" --role contributor --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group-name}
+    ```
+    ```
+    output:
+    {
+    "appId": "your-client-id",
+    "displayName": "my-service-principal",
+    "password": "your-client-secret",
+    "tenant": "your-tenant-id"
+    }
+    ```
+    ```
+    az role assignment create --assignee <SP-Client-ID> --role Contributor --scope /subscriptions/{subscription-id}/resourceGroups/{resource-group-name}
+    ```
+1. Create GitHub Action Secrets, using the previous step output:
+    - AZURE_CLIENT_ID (appId)
+    - AZURE_CLIENT_SECRET (password)
+    - AZURE_SUBSCRIPTION_ID
+    - AZURE_TENANT_ID
 
-output:
-{
-  "appId": "your-client-id",
-  "displayName": "my-service-principal",
-  "password": "your-client-secret",
-  "tenant": "your-tenant-id"
-}
-
-az role assignment create --assignee <SP-Client-ID> --role Contributor --scope /subscriptions/{subscription-id}/resourceGroups/{resource-group-name}
-```
-1. Create GitHub Action secrets, using the previous step output:
-`AZURE_CLIENT_ID (appId), AZURE_CLIENT_SECRET (password), AZURE_SUBSCRIPTION_ID, AZURE_TENANT_ID`
-* Choose values which stands with Azure policy for `SQL_ADMIN_PASSWORD, SQL_ADMIN_USERNAME` and save them also to Github Action Secrets
-
+    Choose values which stands with Azure policy and save them also to Github Action Secrets for:
+    - SQL_ADMIN_PASSWORD
+    - SQL_ADMIN_USERNAME
 
 #### Pipeline - Service app
-1. Get 'publish profile' from Azure App Service: Azure Portal -> App Service > Get publish profile
+1. Get 'publish profile' from Azure App Service: _Azure Portal -> App Service > Get publish profile_
 1. Create Github Action Secrets
-```
-AZURE_CONTAINER_REGISTRY: Your Azure Container Registry name (without .azurecr.io).
-ACR_USERNAME: The username for your Azure Container Registry. (Usually in the form of a service principal or admin user).
-ACR_PASSWORD: The password for your Azure Container Registry (stored in the form of a secret).
-AZURE_APP_SERVICE_PUBLISH_PROFILE: The publish profile from your Azure App Service
-APPLICATION_INSIGHTS_INSTRUMENTATION_KEY: The Instrumentation Key from existing Azure Application Insights resource.
-```
+    - AZURE_CONTAINER_REGISTRY: Your Azure Container Registry name (without .azurecr.io).
+    - ACR_USERNAME: The username for your Azure Container Registry. (Usually in the form of a service principal or admin user).
+    - ACR_PASSWORD: The password for your Azure Container Registry (stored in the form of a secret).
+    - AZURE_APP_SERVICE_PUBLISH_PROFILE: The publish profile from your Azure App Service
+    - APPLICATION_INSIGHTS_INSTRUMENTATION_KEY: The Instrumentation Key from existing Azure Application Insights resource.
+
 
 ---
 
 ### Terraform
 1. Configure the Terraform Azure provider (main.tf)
-    1. azurerm
+    - azurerm
 1. Configure varibles (variables.tf, terraform.tfvars - marked, using github action secrets and pipeline envs instead) 
 1. Create and add an Azure resource group (main.tf)
-    1. Resource group
-    1. Resources - plan, serviceapp, sql server, db, firewall
-    1. Firewall - should restrict access to known IPs or Azure services
-    1. SKU - plan & db - assume using tier "Standard" , size = "S1"
+    - Resource group
+    - Resources - plan, serviceapp, sql server, db, firewall
+    - Firewall - should restrict access to known IPs or Azure services
+    - SKU - plan & db - assume using tier "Standard" , size = "S1"
 1. Configure output in main.tf
 1. Expected output:
     ```
@@ -66,7 +72,10 @@ Get recommandation:
 1. Go to Swagger
 1. Get /find_restaurant, click on 'Try it out'
 1. Fill your sentence in sentenct box or use the given example 'An italian restaurant that opens at 08:00 vegi'
-1. Expected output: `[ "{\"name\": \"Green Bowl\", \"style\": \"Italian\", \"address\": \"Veggie Street 15, Ramat-Gan\", \"open_hour\": \"08:00\", \"close_hour\": \"22:00\", \"vegetarian\": \"yes\", \"delivery\": \"yes\"}"]`
+1. Expected output: 
+    ```
+    [ "{\"name\": \"Green Bowl\", \"style\": \"Italian\", \"address\": \"Veggie Street 15, Ramat-Gan\", \"open_hour\": \"08:00\", \"close_hour\": \"22:00\", \"vegetarian\": \"yes\", \"delivery\": \"yes\"}"] 
+    ```
 
 ### Unit Tests
 * 2 tests files, for db.py and service.py
