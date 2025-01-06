@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import os
+# Ensure the environment variable is set before imports
+os.environ["DATABASE_URL"] = "test_connection_string"
 import json
 
 # Ensure the app module can be found

@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import os
+# Ensure the environment variable is set before imports
+os.environ["DATABASE_URL"] = "test_connection_string"
 # Ensure the app module can be found
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
