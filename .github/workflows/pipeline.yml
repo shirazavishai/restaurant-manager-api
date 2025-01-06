@@ -37,10 +37,10 @@ jobs:
       continue-on-error: true
 
     - name: Upload Test Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-results
-        path:  /home/runner/work/restaurant-manager-api/restaurant-manager-api/test-results.xml 
+        path:  test-results.xml 
 
     - name: 'Login to Azure Container Registry'
       uses: azure/docker-login@v1
