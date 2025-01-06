@@ -6,7 +6,6 @@ import app.db
 from fuzzywuzzy import fuzz
 import dateparser
 from datetime import datetime
-from dotenv import load_dotenv
 import app.logger as logger
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"/data"
