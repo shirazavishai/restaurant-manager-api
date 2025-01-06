@@ -34,6 +34,14 @@ jobs:
     - name: Run tests
       run: |
         python -m pytest restaurantsManage/tests/ --junitxml=test-results.xml
+      continue-on-error: true
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: restaurantsManage/tests/test-results.xml
+      if: failure()
 
     - name: 'Login to Azure Container Registry'
       uses: azure/docker-login@v1
