@@ -41,7 +41,6 @@ jobs:
       with:
         name: test-results
         path: restaurantsManage/tests/test-results.xml
-      if: failure()
 
     - name: 'Login to Azure Container Registry'
       uses: azure/docker-login@v1
@@ -52,7 +51,7 @@ jobs:
 
     - name: 'Build Docker Image'
       run: |
-        docker build -f restaurantsManage/Dockerfile -t ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }}
+        docker buildx build -f restaurantsManage/Dockerfile -t ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }}
     
     - name: 'Push Docker Image to ACR'
       run: |
