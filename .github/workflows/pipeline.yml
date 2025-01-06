@@ -51,7 +51,7 @@ jobs:
 
     - name: 'Build Docker Image'
       run: |
-        docker buildx build -f restaurantsManage/Dockerfile -t ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }}
+        docker buildx build -f restaurantsManage/Dockerfile -t ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/restaurant-recommendation-appservice:${{ github.sha }} restaurantsManage/
     
     - name: 'Push Docker Image to ACR'
       run: |
