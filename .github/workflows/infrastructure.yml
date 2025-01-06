@@ -52,7 +52,7 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Output App Service URL
-        run: echo "App Service URL: $(terraform output -raw app_service_url)"
+        run: echo "App Service URL: $$(terraform output -raw app_service_url)"
 
       - name: Output SQL Server FQDN
-        run: echo "SQL Server FQDN: $(terraform output -raw sql_server_fqdn)"
+        run: echo "SQL Server FQDN: $$(terraform output -raw sql_server_fqdn)"
