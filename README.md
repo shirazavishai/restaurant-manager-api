@@ -83,7 +83,7 @@ Get recommandation:
 
 ---
 
-###  details
+###  Details
 Requirement | Solution / Implementation Details
 --- | --- 
 The system has to be cloud-native, with a preference for Azure with a simple architecture that will require a minimal amount of maintenance | Used Azure sql and Azure service app, together they ensure minimal maintenance while providing a reliable and secure environment for the cloud-native system
