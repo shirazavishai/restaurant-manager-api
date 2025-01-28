@@ -83,10 +83,9 @@ Get recommandation:
 
 ---
 
-### Assignment details
+###  details
 Requirement | Solution / Implementation Details
 --- | --- 
-The assignment submission should be done in a GIT repo that we can access, could be yours or a dedicated one. a. Please include all code required to set up the system | https://github.com/shirazavishai/restaurant-manager-api.git 
 The system has to be cloud-native, with a preference for Azure with a simple architecture that will require a minimal amount of maintenance | Used Azure sql and Azure service app, together they ensure minimal maintenance while providing a reliable and secure environment for the cloud-native system
 The system should be written in full IaC style. Use Terraform for configuring the required cloud resources | I used Terraform with variables to define the system's infrastructure as code, ensuring consistent and flexible provisioning of Azure resources
 There should be some backend storage mechanism that holds the history of all requests and returned responses. a. Consider that the backend data stored is highly confidential | I used Python with pyodbc to connect to Azure SQL for storing request and response histories. To ensure confidentiality, I encrypted sensitive data using the cryptography library and managed environment variable to pass the connection string. 
